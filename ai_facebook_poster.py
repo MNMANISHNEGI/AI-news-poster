@@ -40,7 +40,7 @@ def generate_facebook_post(title, description, link):
             "Content-Type": "application/json"
         },
         json={
-            "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",  # Or try others like 'meta-llama/Llama-3-8b-chat-hf'
+            "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",  
             "messages": [
                 { "role": "user", "content": prompt }
             ],
@@ -99,52 +99,52 @@ def chat_with_gpt(user_input, chat_history):
         chat_history.append({"role": "assistant", "content": reply})
         return reply
     else:
-        return "⚠️ Failed to get a response from Together.ai"
+        return " Failed to get a response from Together.ai"
 
 
 # === CHAT LOOP ===
 
 def chatbot():
-    print("🤖 Jarvis | Type 'exit' to quit | Type 'post latest ai news' to post")
+    print("Jarvis | Type 'exit' to quit | Type 'post latest ai news' to post")
     chat_history = [{"role": "system", "content": "You are a helpful assistant."}]
 
     while True:
         user_input = input("👤 You: ").strip()
 
         if user_input.lower() == "exit":
-            print("👋 Goodbye!")
+            print(" Goodbye!")
             break
 
         elif user_input.lower().startswith("post this:"):
             message = user_input[len("post this:"):].strip()
             result = post_to_facebook(message)
             if "id" in result:
-                print("✅ Posted to Facebook! Post ID:", result["id"])
+                print(" Posted to Facebook! Post ID:", result["id"])
             else:
-                print("❌ Failed to post:", result)
+                print(" Failed to post:", result)
 
         elif user_input.lower() == "post latest ai news":
-            print("📥 Fetching latest AI news...")
+            print(" Fetching latest AI news...")
             article = get_latest_ai_news()
             if not article:
                 print("❌ No news found.")
                 continue
             title, desc, link = article["title"], article["description"], article["url"]
             post = generate_facebook_post(title, desc, link)
-            print("📝 Suggested Post:\n", post)
-            confirm = input("\n👉 Post this to Facebook? (y/n): ").strip().lower()
+            print(" Suggested Post:\n", post)
+            confirm = input("\n Post this to Facebook? (y/n): ").strip().lower()
             if confirm == "y":
                 result = post_to_facebook(post)
                 if "id" in result:
-                    print("✅ Posted to Facebook! Post ID:", result["id"])
+                    print(" Posted to Facebook! Post ID:", result["id"])
                 else:
-                    print("❌ Failed to post:", result)
+                    print(" Failed to post:", result)
             else:
-                print("🛑 Post canceled.")
+                print(" Post canceled.")
 
         else:
             response = chat_with_gpt(user_input, chat_history)
-            print("🤖 GPT:", response)
+            print(" GPT:", response)
 
 
 # === RUN ===
